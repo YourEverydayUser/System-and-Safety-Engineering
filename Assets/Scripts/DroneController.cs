@@ -1,12 +1,27 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class DroneController : MonoBehaviour {
     public float speed = 5.0f;
     public float rotationSpeed = 100.0f;
 
+    [SerializeField] private WaypointPathScript waypointPathScript;
+    [SerializeField] private GameObject explosionPrefab;
+    
     private Transform _centerPiece;
+    private Collider _ownCollider;
+    private ChildCollider[] _childColliderScripts;
 
     private void Start() {
+        _ownCollider = transform.GetComponent<Collider>();
+        _childColliderScripts = transform.GetComponentsInChildren<ChildCollider>();
+        
+        foreach (var childColliderScript in _childColliderScripts) {
+            if (childColliderScript) {
+                childColliderScript.OnChildCollision += HandleChildCollision;
+            }
+        }
+        
         _centerPiece = transform.Find("Center");
         if (!_centerPiece) {
             Debug.LogError("Center piece not found in the drone's children objects.");
@@ -34,5 +49,18 @@ public class DroneController : MonoBehaviour {
         if (Input.GetKey(KeyCode.Q)) {
             transform.Rotate(0, -rotationSpeed * Time.deltaTime, 0, Space.World);
         }
+    }
+
+    private void HandleChildCollision(Collision collision) {
+        Debug.Log($"Child collider triggered by {collision.gameObject.name}, activating main drone collider.");
+        if (_ownCollider) {
+            PlayExplosion();
+            _ownCollider.enabled = true;
+        }
+    }
+
+    private void PlayExplosion() {
+        GameObject explosionInstance = Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+        Destroy(explosionInstance, 4f);
     }
 }
