@@ -53,9 +53,15 @@ public class DroneController : MonoBehaviour {
 
     private void HandleChildCollision(Collision collision) {
         Debug.Log($"Child collider triggered by {collision.gameObject.name}, activating main drone collider.");
+        if (collision.gameObject.name.Equals("Character_C")) {
+            Animator animator = collision.gameObject.GetComponent<Animator>();
+            animator.SetBool("Collided", true);
+        }
         if (_ownCollider) {
-            PlayExplosion();
-            _ownCollider.enabled = true;
+            //PlayExplosion();
+            Debug.Log("We collided. Disabling main collider and stopping movement!");
+            waypointPathScript.StopMovement();
+            _ownCollider.enabled = false;
         }
     }
 
