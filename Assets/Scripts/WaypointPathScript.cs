@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class WaypointPathScript : MonoBehaviour {
 
-    [SerializeField] private float speed;
+    public float Speed { get; set; }
     [SerializeField] private float rotationSpeed;
     [SerializeField] private float threshold = 0.1f;
     [SerializeField] private Vector3 startingPoint;
@@ -51,16 +51,12 @@ public class WaypointPathScript : MonoBehaviour {
 
     private void OnCollisionEnter(Collision other) {
         Debug.Log($"Collided with {other.gameObject.name}");
-        StopMovement();
-    }
-
-    public void StopMovement() {
-        speed = 0;
+        Speed = 0;
     }
 
     private void MoveTowardsCurrentWaypoint() {
         if (Vector3.Distance(transform.position, _currentTarget) > threshold) {
-            transform.position = Vector3.MoveTowards(transform.position, _currentTarget, speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, _currentTarget, Speed * Time.deltaTime);
             transform.rotation = Quaternion.Slerp(transform.rotation, _currentTargetRotation, rotationSpeed * Time.deltaTime);
         } else {
             OnWaypointReached(_currentTarget, _currentTargetRotation);

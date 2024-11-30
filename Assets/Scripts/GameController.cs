@@ -1,8 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour {
 
@@ -25,8 +23,9 @@ public class GameController : MonoBehaviour {
     }
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.X)) {
-            _waypointPathScript.StopMovement();
+        if (Input.GetKeyDown(KeyCode.S)) {
+            bool movementStopped = _waypointPathScript.Speed == 0;
+            _waypointPathScript.Speed = movementStopped ? 4 : 0;
         }
 
         if (Input.GetKeyDown(KeyCode.G)) {
@@ -55,6 +54,8 @@ public class GameController : MonoBehaviour {
 
     private void OnWaypointReached(object sender, WaypointPathScript.WaypointReachedEventArgs eventArgs) {
         Debug.Log("We reached a waypoint");
+        if(SceneManager.GetActiveScene().name.Equals("BetterScenario1")) return;
+        
         cameras[_pointer].enabled = false;
         _pointer++;
         cameras[_pointer].enabled = true;

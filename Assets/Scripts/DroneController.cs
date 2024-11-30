@@ -49,6 +49,10 @@ public class DroneController : MonoBehaviour {
         if (Input.GetKey(KeyCode.Q)) {
             transform.Rotate(0, -rotationSpeed * Time.deltaTime, 0, Space.World);
         }
+
+        if (Input.GetKey(KeyCode.S)) {
+            speed = 0;
+        }
     }
 
     private void HandleChildCollision(Collision collision) {
@@ -60,7 +64,7 @@ public class DroneController : MonoBehaviour {
         if (_ownCollider) {
             //PlayExplosion();
             Debug.Log("We collided. Disabling main collider and stopping movement!");
-            waypointPathScript.StopMovement();
+            waypointPathScript.Speed = 0;
             _ownCollider.enabled = false;
         }
     }
