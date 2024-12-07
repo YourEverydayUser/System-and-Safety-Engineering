@@ -54,7 +54,7 @@ public class GameController : MonoBehaviour {
 
     private void OnWaypointReached(object sender, WaypointPathScript.WaypointReachedEventArgs eventArgs) {
         Debug.Log("We reached a waypoint");
-        if(SceneManager.GetActiveScene().name.Equals("BetterScenario1")) return;
+        if(!SceneManager.GetActiveScene().name.Equals("WorseScenario1")) return;
         
         cameras[_pointer].enabled = false;
         _pointer++;

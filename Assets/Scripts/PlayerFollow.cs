@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FollowPlayer : MonoBehaviour {
     public Transform target;
@@ -9,6 +10,7 @@ public class FollowPlayer : MonoBehaviour {
     private Vector3 _velocity = Vector3.zero;
 
     void LateUpdate() {
+        if (SceneManager.GetActiveScene().name.Equals("Scenario2")) return;
         Vector3 desiredPosition = target.TransformPoint(offset);
         transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref _velocity, positionSmoothTime);
 
